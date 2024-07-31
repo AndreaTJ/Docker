@@ -1,0 +1,45 @@
+services: 
+  db: 
+    image: postgres:16.3-alpine
+    container_name: db-container
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB : ${DB_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - data-db:/var/lib/postgreslq/data
+  
+  api: 
+    build: ./api
+    container_name: api-container
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db # el servicio 
+      PORT: ${API_PORT}
+    volumes:
+      - ./api:/app
+    ports:
+      - 5000:${API_PORT}
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: frontend-container
+    environment:
+      PORT: ${FRONTEND_PORT}
+    ports: 
+      - 3000:${FRONTEND_PORT}
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - api
+
+volumes:
+  data-db: 
+
+
