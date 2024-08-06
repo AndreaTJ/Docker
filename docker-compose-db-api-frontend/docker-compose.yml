@@ -12,7 +12,7 @@ services:
       - data-db:/var/lib/postgreslq/data
   
   api: 
-    build: ./api
+    image: public.ecr.aws/c2r5q9c4/api:1.0
     container_name: api-container
     environment:
       DB_NAME: ${DB_NAME}
@@ -28,7 +28,7 @@ services:
       - db
 
   frontend:
-    build: ./frontend
+    image: public.ecr.aws/c2r5q9c4/frontend:1.0
     container_name: frontend-container
     environment:
       PORT: ${FRONTEND_PORT}
